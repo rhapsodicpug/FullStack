@@ -1,0 +1,54 @@
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import authRoutes from './routes/auth.js';
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.use('/api/auth', authRoutes);
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Server is running' });
+});
+
+// Connect to MongoDB
+if (process.env.MONGODB_URI) {
+  mongoose
+    .connect(process.env.MONGODB_URI)
+    .then(() => {
+      console.log('✅ Connected to MongoDB successfully');
+    })
+    .catch((error) => {
+      console.error('❌ MongoDB connection error:', error.message);
+      if (error.message.includes('authentication failed')) {
+        console.error('\n💡 Common fixes:');
+        console.error('1. Check your username and password in the connection string');
+        console.error('2. If password has special characters, URL-encode them (e.g., @ becomes %40)');
+        console.error('3. Verify the database user exists in MongoDB Atlas');
+        console.error('4. Make sure you replaced <password> with your actual password');
+      }
+    });
+} else {
+  console.error('MONGODB_URI is not defined in environment variables');
+}
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
+// Export for Vercel serverless
+export default app;
+
