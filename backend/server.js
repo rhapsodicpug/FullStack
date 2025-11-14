@@ -9,17 +9,38 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// Middleware - CORS configuration
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://stupendous-gumdrop-727a63.netlify.app',
+  'https://full-stack-git-main-rhapsodicpugs-projects.vercel.app',
+  process.env.FRONTEND_URL,
+  ...(process.env.FRONTEND_URLS ? process.env.FRONTEND_URLS.split(',') : [])
+].filter(Boolean);
+
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'https://stupendous-gumdrop-727a63.netlify.app',
-    'https://full-stack-git-main-rhapsodicpugs-projects.vercel.app',
-    /^https:\/\/.*\.vercel\.app$/,  // Allow all Vercel preview deployments
-    /^https:\/\/.*\.netlify\.app$/,  // Allow all Netlify deployments
-    process.env.FRONTEND_URL,
-    ...(process.env.FRONTEND_URLS ? process.env.FRONTEND_URLS.split(',') : [])
-  ].filter(Boolean),
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Check if origin is in allowed list
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    // Check if origin matches Vercel pattern
+    if (/^https:\/\/.*\.vercel\.app$/.test(origin)) {
+      return callback(null, true);
+    }
+    
+    // Check if origin matches Netlify pattern
+    if (/^https:\/\/.*\.netlify\.app$/.test(origin)) {
+      return callback(null, true);
+    }
+    
+    // Reject other origins
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
