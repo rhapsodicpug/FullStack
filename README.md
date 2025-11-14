@@ -4,13 +4,13 @@ A full-stack web application with role-based authentication (User/Admin) built w
 
 ## Features
 
-- ✅ Role-based signup/login (User or Admin)
-- ✅ Secure password storage using bcrypt
-- ✅ JWT-based authentication
-- ✅ Protected dashboard routes
-- ✅ Role-specific dashboard headers
-- ✅ Form validation with Zod
-- ✅ Modern UI with TailwindCSS
+-  Role-based signup/login (User or Admin)
+-  Secure password storage using bcrypt
+-  JWT-based authentication
+-  Protected dashboard routes
+-  Role-specific dashboard headers
+-  Form validation with Zod
+-  Modern UI with TailwindCSS
 
 ## Tech Stack
 
