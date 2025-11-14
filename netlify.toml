@@ -1,0 +1,6 @@
+[build]
+  ignore = "git submodule update"
+
+[build.environment]
+  GIT_SUBMODULE_STRATEGY = "none"
+
