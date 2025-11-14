@@ -14,6 +14,9 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'https://stupendous-gumdrop-727a63.netlify.app',
+    'https://full-stack-git-main-rhapsodicpugs-projects.vercel.app',
+    /^https:\/\/.*\.vercel\.app$/,  // Allow all Vercel preview deployments
+    /^https:\/\/.*\.netlify\.app$/,  // Allow all Netlify deployments
     process.env.FRONTEND_URL,
     ...(process.env.FRONTEND_URLS ? process.env.FRONTEND_URLS.split(',') : [])
   ].filter(Boolean),
