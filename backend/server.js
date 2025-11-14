@@ -10,7 +10,17 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://stupendous-gumdrop-727a63.netlify.app',
+    process.env.FRONTEND_URL,
+    ...(process.env.FRONTEND_URLS ? process.env.FRONTEND_URLS.split(',') : [])
+  ].filter(Boolean),
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(express.json());
 
 // Root route (must be before other routes)
